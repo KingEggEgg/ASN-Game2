@@ -1,0 +1,90 @@
+/* ASN Rush mobile interaction + animation hotfix */
+.speech::after{display:none!important;content:none!important}
+
+/* Picker: full-screen dim background, only answer buttons visible */
+.picker-overlay{
+  position:fixed!important;
+  inset:0!important;
+  z-index:99999!important;
+  display:none!important;
+  place-items:center!important;
+  padding:20px!important;
+  background:rgba(2,7,13,.86)!important;
+  backdrop-filter:blur(5px)!important;
+}
+.picker-overlay.show{display:grid!important}
+.picker-head{display:none!important}
+.picker-sheet{
+  width:min(88vw,420px)!important;
+  max-height:82vh!important;
+  overflow:auto!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.picker-choices{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:14px!important;
+  width:100%!important;
+}
+.picker-option{
+  display:block!important;
+  width:100%!important;
+  min-height:72px!important;
+  padding:15px 16px!important;
+  margin:0!important;
+  border:3px solid var(--ink)!important;
+  border-radius:17px!important;
+  background:var(--paper)!important;
+  color:var(--ink)!important;
+  box-shadow:4px 4px 0 var(--ink)!important;
+  text-align:center!important;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace!important;
+  font-size:18px!important;
+  font-weight:900!important;
+  line-height:1.25!important;
+  cursor:pointer!important;
+}
+.picker-option:active{transform:translateY(2px)!important;box-shadow:2px 2px 0 var(--ink)!important}
+.picker-option.pallet{font-family:system-ui,-apple-system,"Segoe UI",sans-serif!important;text-align:left!important}
+.picker-option strong{display:block!important;font-size:18px!important}
+.picker-option span{display:block!important;margin-top:4px!important;font-size:14px!important;color:#46607a!important}
+
+/* Keep every cartoon scene visibly alive after the initial entrance */
+.scene.active .road::after{animation:hotfixRoad 1.15s linear infinite!important}
+.scene.active .warehouse-building{animation:hotfixPulse 2s ease-in-out infinite!important}
+.scene.active .truck-box,.scene.active .truck-cab{animation:hotfixVibe .65s 2.55s ease-in-out infinite!important}
+.scene.active .system-screen{animation:hotfixPulse 1.55s 2.65s ease-in-out infinite!important}
+.scene.active .invoice-paper i{animation:hotfixLine 1.1s 2.65s ease-in-out infinite alternate!important}
+.scene.active .final-flow{animation:hotfixFloat 1.5s 3.1s ease-in-out infinite!important}
+.scene.active .success-burst{animation:burstIn .5s 3.25s forwards,hotfixPulse 1.25s 3.8s ease-in-out infinite!important}
+.scene.active .cartoon-truck{animation:truckDrive 2.2s .35s ease-out forwards!important;animation-duration:2.2s!important;animation-iteration-count:1!important}
+.scene.active .wheel{animation:wheelSpin .5s linear 5!important;animation-duration:.5s!important;animation-iteration-count:5!important}
+.scene.active .speech-one{animation:popIn .45s 1.6s forwards,hotfixFloat 1.6s 2.2s ease-in-out infinite!important}
+.scene.active .worker-a{animation:workerBounce 1.1s .45s ease-in-out infinite!important}
+.scene.active .worker-b{animation:workerBounce 1.1s .8s ease-in-out infinite!important}
+
+@keyframes hotfixRoad{from{background-position-x:0}to{background-position-x:68px}}
+@keyframes hotfixPulse{0%,100%{filter:brightness(1);transform:scale(1)}50%{filter:brightness(1.08);transform:scale(1.015)}}
+@keyframes hotfixVibe{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes hotfixLine{from{transform:scaleX(.96)}to{transform:scaleX(1.03)}}
+@keyframes hotfixFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* Mobile sizing */
+@media(max-width:520px){
+  .picker-option{min-height:76px!important;font-size:19px!important;padding:17px 15px!important}
+  .picker-option strong{font-size:19px!important}
+  .picker-option span{font-size:15px!important}
+}
+
+/* Do not let device Reduced Motion make the cartoon completely static */
+@media(prefers-reduced-motion:reduce){
+  .scene.active .road::after{animation-duration:2s!important;animation-iteration-count:infinite!important}
+  .scene.active .warehouse-building,.scene.active .truck-box,.scene.active .truck-cab,.scene.active .system-screen,.scene.active .invoice-paper i,.scene.active .final-flow{animation-duration:2.4s!important;animation-iteration-count:infinite!important}
+  .scene.active .cartoon-truck{animation-duration:2.2s!important;animation-iteration-count:1!important}
+  .scene.active .wheel{animation-duration:.7s!important;animation-iteration-count:4!important}
+  .scene.active .worker-a,.scene.active .worker-b{animation-duration:1.4s!important;animation-iteration-count:infinite!important}
+}

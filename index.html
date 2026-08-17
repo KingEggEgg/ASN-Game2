@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>ASN Rush</title>
+  <link rel="stylesheet" href="styles-v14-1.css?v=14">
+  <link rel="stylesheet" href="styles-v14-2.css?v=14">
+  <link rel="stylesheet" href="styles-v14-3.css?v=14">
+  <link rel="stylesheet" href="styles-v14-4.css?v=14">
+  <link rel="stylesheet" href="styles-v18-portrait.css?v=18">
+</head>
+<body>
+<main class="app">
+  <section class="shell">
+    <div class="overlay" id="overlay" aria-hidden="true">
+      <div class="transition-card">
+        <div class="transition-icon" id="transitionIcon">📦</div>
+        <h3 id="transitionTitle">Mission Update</h3>
+        <p id="transitionText">Ready?</p>
+        <button class="primary small" id="transitionContinue">Continue</button>
+      </div>
+    </div>
+
+    <div class="picker-overlay" id="pickerOverlay" aria-hidden="true">
+      <div class="picker-sheet" role="dialog" aria-modal="true">
+        <div class="picker-choices" id="pickerChoices"></div>
+      </div>
+    </div>
+
+    <header class="topbar">
+      <div>
+        <strong>PGP1 Receiving & Warehouse</strong>
+        <span>Commercial Day • ASN Rush</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
+    </header>
+
+    <section class="page active" id="startPage">
+      <div class="badge">Commercial Day Mini Game</div>
+      <section class="story-card">
+        <div class="story-heading">
+          <h1>ASN Rush</h1>
+          <p>A short cartoon story before the mission starts.</p>
+        </div>
+
+        <div class="story-scene-wrap portrait-story">
+          <div class="story-caption" id="storyCaption">
+            <strong>Scene 1</strong><span>A shipment is on the way — but there is no ASN yet.</span>
+          </div>
+          <div class="portrait-comic-frame">
+            <img class="portrait-comic active" data-scene="0" src="assets/comic/opening-1.webp" alt="Shipment is on the way, but Receiving has no ASN yet.">
+            <img class="portrait-comic" data-scene="1" src="assets/comic/opening-2.webp" alt="Check and match the Dummy Invoice.">
+            <img class="portrait-comic" data-scene="2" src="assets/comic/opening-3.webp" alt="Create the ASN so Receiving can continue.">
+          </div>
+        </div>
+        <div class="story-controls">
+          <div id="storyStep">Scene 1 / 3</div>
+          <div class="story-buttons">
+            <button class="secondary small" id="storyBack" disabled>Back</button>
+            <button class="secondary small" id="storyNext">Next</button>
+          </div>
+        </div>
+      </section>
+      <button class="primary full" id="startMission">Start Mission</button>
+    </section>
+
+    <section class="page" id="asnPage">
+      <div class="badge">Step 1 of 2</div>
+      <div class="mission-strip"><strong>🚛 Shipment arrived • Target: 60 sec</strong><span class="timer" id="timer1">00:00</span></div>
+      <div class="section-title"><h2>Match the Dummy Invoice</h2><p>Look at the printed Dummy Invoice. Tap each ASN field, then choose the matching answer from the pop-up.</p></div>
+      <div class="hint">Tip: tap one ASN field at a time. The answer choices will pop up, so you do not need to scroll down.</div>
+      <div class="message" id="asnMessage"></div>
+      <div class="game-grid single-grid">
+        <section class="panel"><h3>ASN Fields</h3><div id="fieldList"></div></section>
+      </div>
+      <div class="actions"><button class="primary" id="checkAsn">Check ASN Entry</button><button class="secondary" id="restartAsn">Restart</button></div>
+    </section>
+
+    <section class="page" id="huPage">
+      <div class="badge">Step 2 of 2</div>
+      <div class="mission-strip"><strong>📦 Final step • Choose the pallet</strong><span class="timer" id="timer2">00:00</span></div>
+      <div class="section-title"><h2>Choose the Pallet That Fits</h2><p>Compare the pallet size with the rack. Tap the button to open the pallet options.</p></div>
+      <div class="message" id="huMessage"></div>
+      <div class="game-grid">
+        <section class="panel">
+          <h3>Rack Dimension</h3>
+          <div class="rack-visual"><div class="rack-frame"><i></i><b></b></div><span class="dh">H 500</span><span class="dw">W 800</span><span class="dl">L 1200</span></div>
+          <p>Dimension: <strong>1200 × 800 × 500 mm</strong></p>
+        </section>
+        <section class="panel pallet-test-panel">
+          <h3>Pallet Fit Test</h3>
+          <div class="hint compact">Choose a pallet. The game will automatically try to place it into the rack.</div>
+          <div class="true3d-wrap" id="fitTest" aria-live="polite">
+            <canvas id="rackCanvas" class="rack-canvas" aria-label="3D pallet rack simulation"></canvas>
+            <div class="canvas-dimension">Rack Opening<br><strong>1200 × 800 × 500 mm</strong></div>
+            <div class="fit-result canvas-result" id="fitResult"></div>
+          </div>
+          <div id="palletPreview" class="selection-preview">No pallet selected yet.</div>
+          <button class="primary full" id="openPalletPicker">Choose Pallet Option</button>
+        </section>
+      </div>
+      <div class="actions"><button class="secondary" id="restartHu">Restart</button></div>
+    </section>
+
+    <section class="page" id="donePage">
+      <div class="done">
+        <div class="done-check">✓</div>
+        <div class="badge">Mission Complete</div>
+        <h2>ASN Created</h2>
+        <p>Great job — you helped Receiving continue the inbound process.</p>
+        <div class="ending-comic-strip" aria-label="Receiving story after ASN creation">
+          <img src="assets/comic/ending-celebration.webp" alt="ASN created successfully celebration.">
+          <img src="assets/comic/ending-asn-found.webp" alt="Shipment arrives and Receiving finds the ASN.">
+          <img src="assets/comic/ending-gr-complete.webp" alt="Goods Receipt completed successfully.">
+        </div>
+        <div><p>Your Time</p><div class="final-time" id="finalTime">00:00</div></div>
+        <div class="summary">
+          <div>✅ Correct invoice information matched</div>
+          <div>✅ Correct pallet selected</div>
+          <div>✅ Packaging Material <strong>6000.115.761</strong> • HU Type <strong>E105</strong></div>
+        </div>
+        <p><strong>Challenge a colleague to beat your time!</strong></p>
+        <button class="primary" id="playAgain">Play Again</button>
+      </div>
+    </section>
+  </section>
+</main>
+<script src="app-v14-1.js?v=14"></script>
+<script src="app-v14-2.js?v=14"></script>
+<script src="app-v14-3.js?v=14"></script>
+</body>
+</html>

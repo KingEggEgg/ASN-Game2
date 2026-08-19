@@ -57,14 +57,15 @@
           <h1>ASN Rush</h1>
           <p>A short cartoon story before the mission starts.</p>
         </div>
+
         <div class="story-scene-wrap portrait-story">
           <div class="story-caption" id="storyCaption">
             <strong>Scene 1</strong><span>A shipment is on the way — but there is no ASN yet.</span>
           </div>
           <div class="portrait-comic-frame">
             <img class="portrait-comic active" data-scene="0" src="assets/comic/opening-1.webp" alt="Shipment is on the way, but Receiving has no ASN yet.">
-            <img class="portrait-comic" data-scene="1" src="assets/comic/opening-2.webp" alt="Check and match the Dummy Invoice.">
-            <img class="portrait-comic" data-scene="2" src="assets/comic/opening-3.webp" alt="Create the ASN so Receiving can continue.">
+            <img class="portrait-comic" data-scene="1" src="assets/comic/opening-2.webp" alt="The shipment has arrived, but Receiving cannot do GR.">
+            <img class="portrait-comic" data-scene="2" src="assets/comic/opening-3.webp" alt="Receiving seeks help to create the ASN.">
           </div>
         </div>
         <div class="story-controls">
@@ -124,15 +125,14 @@
           <p>See what happens after the ASN is created.</p>
         </div>
         <div class="story-caption" id="endingCaption">
-          <strong>Scene 4</strong><span>ASN created successfully — time to celebrate!</span>
+          <strong>Scene 4</strong><span>Great job! The ASN is ready.</span>
         </div>
         <div class="ending-single-frame">
           <img class="ending-scene active" data-ending-scene="0" src="assets/comic/ending-celebration.webp" alt="ASN created successfully celebration.">
-          <img class="ending-scene" data-ending-scene="1" src="assets/comic/ending-asn-found.webp" alt="Shipment arrives and Receiving finds the ASN.">
-          <img class="ending-scene" data-ending-scene="2" src="assets/comic/ending-gr-complete.webp" alt="Goods Receipt completed successfully.">
+          <img class="ending-scene" data-ending-scene="1" src="assets/comic/ending-asn-found.webp" alt="ASN found and Receiving can continue.">
         </div>
         <div class="story-controls ending-controls">
-          <div id="endingStep">Scene 4 / 6</div>
+          <div id="endingStep">Scene 4 / 5</div>
           <div class="story-buttons">
             <button class="secondary small" id="endingBack" disabled>Back</button>
             <button class="secondary small" id="endingNext">Next</button>
@@ -147,17 +147,19 @@
         <div class="badge">Mission Complete</div>
         <h2>ASN Created</h2>
         <p>Great job — you helped Receiving continue the inbound process.</p>
-        <div><p>Your Time</p><div class="final-time" id="finalTime">00:00</div></div>
+<div><p>Your Time</p><div class="final-time" id="finalTime">00:00</div></div>
         <div class="summary">
           <div>✅ Correct invoice information matched</div>
           <div>✅ Correct pallet selected</div>
           <div>✅ Packaging Material <strong>6000.115.761</strong> • HU Type <strong>E105</strong></div>
         </div>
         <p><strong>Challenge a colleague to beat your time!</strong></p>
+        
         <section class="leaderboard-panel" id="leaderboardPanel">
           <div class="leaderboard-kicker">🏆 ASN RUSH LIVE LEADERBOARD</div>
           <h3>Join the Ranking</h3>
           <p class="leaderboard-sub">Your game time is captured automatically.</p>
+
           <div class="score-capture">
             <div class="score-box">
               <span>Your Time</span>
@@ -169,11 +171,13 @@
             </label>
             <button class="primary" id="submitScoreBtn" type="button">Submit Score</button>
           </div>
+
           <div class="leaderboard-status" id="leaderboardStatus">Leaderboard not connected.</div>
           <div class="rank-highlight" id="rankHighlight" hidden>
             <span>Your Current Rank</span>
             <strong id="currentRank">#–</strong>
           </div>
+
           <div class="leaderboard-table-wrap">
             <table class="leaderboard-table">
               <thead><tr><th>#</th><th>Player</th><th>Time</th></tr></thead>
@@ -182,8 +186,10 @@
               </tbody>
             </table>
           </div>
+
           <a class="leaderboard-display-link" href="leaderboard.html" target="_blank" rel="noopener">Open Big-Screen Leaderboard ↗</a>
         </section>
+
         <button class="primary" id="playAgain">Play Again</button>
       </div>
     </section>
@@ -192,6 +198,7 @@
 <script src="app-v14-1.js?v=14"></script>
 <script src="app-v14-2.js?v=14"></script>
 <script src="app-v14-3.js?v=14"></script>
-<script type="module" src="leaderboard.js?v=24"></script>
+<script src="story-v29.js?v=29"></script>
+  <script type="module" src="leaderboard.js?v=24"></script>
 </body>
 </html>

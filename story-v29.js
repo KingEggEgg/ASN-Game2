@@ -29,11 +29,11 @@
   window.startOpeningAutoPlay=function(){
     clearTimeout(introTimer);
     const btn=document.getElementById('startMission');
-    if(btn){btn.style.display='none';btn.disabled=true;}
+    if(btn){btn.style.setProperty('display','none','important');btn.disabled=true;}
     let i=0;setIntro(0);
     const next=()=>{
       if(i<2){i++;setIntro(i);introTimer=setTimeout(next,INTRO_DELAY);}
-      else if(btn){btn.style.display='block';btn.disabled=false;}
+      else if(btn){btn.style.setProperty('display','block','important');btn.disabled=false;}
     };
     introTimer=setTimeout(next,INTRO_DELAY);
   };
@@ -49,6 +49,6 @@
   };
   window.addEventListener('load',()=>{
     const btn=document.getElementById('startMission');
-    if(btn)btn.style.display='none';
+    if(btn)btn.style.setProperty('display','none','important');
   });
 })();

@@ -1,7 +1,7 @@
 import { firebaseConfig, leaderboardPath } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import {
-  getDatabase, ref, onValue, query, orderByChild, limitToFirst, get, remove
+  getDatabase, ref, onValue, get, remove
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 import {
   getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
@@ -22,15 +22,22 @@ function sortRows(rows){
   return rows.sort((a,b)=>(Number(a.scoreSeconds)||999999)-(Number(b.scoreSeconds)||999999)||(Number(a.completedAt)||0)-(Number(b.completedAt)||0));
 }
 function render(scores){
-  $("bestTime").textContent=scores.length?fmt(scores[0].scoreSeconds):"--:--";
-  $("displayRows").innerHTML=scores.length?scores.slice(0,50).map((x,i)=>`
+  const top50=scores.slice(0,50);
+  $("bestTime").textContent=top50.length?fmt(top50[0].scoreSeconds):"--:--";
+  $("displayRows").innerHTML=top50.length?top50.map((x,i)=>`
     <tr><td>#${i+1}</td><td>${esc(x.playerName||"Player")}</td><td>${fmt(x.scoreSeconds)}</td></tr>
   `).join(""):'<tr><td colspan="3" style="text-align:center;opacity:.65">No scores yet.</td></tr>';
+  $("displayStatus").textContent=`● LIVE · ${top50.length} score${top50.length===1?'':'s'} shown · refresh every 5 sec`;
   $("lastRefresh").textContent="Refresh: "+new Date().toLocaleTimeString();
 }
 function snapshotToRows(snap){
   const rows=[];
-  snap.forEach(child=>rows.push({id:child.key,...child.val()}));
+  snap.forEach(child=>{
+    const value=child.val()||{};
+    if(Number.isFinite(Number(value.scoreSeconds))){
+      rows.push({id:child.key,...value});
+    }
+  });
   return sortRows(rows);
 }
 
@@ -42,11 +49,11 @@ if(!configured){
     const db=getDatabase(app);
     const auth=getAuth(app);
     const scoreRef=ref(db,leaderboardPath);
-    const top50=query(scoreRef,orderByChild("scoreSeconds"),limitToFirst(50));
 
-    onValue(top50,snap=>{
+    // Read the complete score collection, sort in the browser, then display Top 50.
+    // This avoids query/index edge cases that could make the big-screen board show only one row.
+    onValue(scoreRef,snap=>{
       render(snapshotToRows(snap));
-      $("displayStatus").textContent="● LIVE · auto refresh every 5 sec";
     },err=>{
       console.error(err);
       $("displayStatus").textContent="Connection error — check Firebase rules/config";
@@ -54,13 +61,14 @@ if(!configured){
 
     async function refreshNow(){
       try{
-        const snap=await get(top50);
+        const snap=await get(scoreRef);
         render(snapshotToRows(snap));
       }catch(err){
         console.error("5-sec refresh failed",err);
       }
     }
     setInterval(refreshNow,5000);
+    refreshNow();
 
     $("adminToggle").onclick=()=>$("adminPanel").classList.toggle("show");
 
@@ -92,10 +100,8 @@ if(!configured){
         $("adminMessage").textContent="Admin login required.";
         return;
       }
-      const ok=confirm("Delete ALL leaderboard scores? This cannot be undone.");
-      if(!ok)return;
-      const ok2=confirm("Final confirmation: reset the entire ASN Rush leaderboard?");
-      if(!ok2)return;
+      if(!confirm("Delete ALL leaderboard scores? This cannot be undone."))return;
+      if(!confirm("Final confirmation: reset the entire ASN Rush leaderboard?"))return;
       try{
         await remove(scoreRef);
         $("adminMessage").textContent="All scores have been reset.";

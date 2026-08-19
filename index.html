@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="styles-v14-3.css?v=14">
   <link rel="stylesheet" href="styles-v14-4.css?v=14">
   <link rel="stylesheet" href="styles-v18-portrait.css?v=18">
+  <link rel="stylesheet" href="styles-v21-ending.css?v=21">
+  <link rel="stylesheet" href="leaderboard.css?v=24">
 </head>
 <body>
 <main class="app">
@@ -26,6 +28,17 @@
       <div class="picker-sheet" role="dialog" aria-modal="true">
         <div class="picker-choices" id="pickerChoices"></div>
       </div>
+    </div>
+
+    <div id="celebrationOverlay" class="celebration-overlay" aria-hidden="true">
+      <div class="celebration-fireworks" aria-hidden="true">
+        <i class="fw fw1"></i><i class="fw fw2"></i><i class="fw fw3"></i><i class="fw fw4"></i>
+      </div>
+      <div class="celebration-balloons" aria-hidden="true">
+        <i class="balloon b1"></i><i class="balloon b2"></i><i class="balloon b3"></i><i class="balloon b4"></i><i class="balloon b5"></i>
+      </div>
+      <div class="celebration-confetti" id="celebrationConfetti" aria-hidden="true"></div>
+      <div class="celebration-title"><span>🎉</span><strong>ASN CREATED!</strong><small>Great job!</small></div>
     </div>
 
     <header class="topbar">
@@ -103,24 +116,80 @@
       <div class="actions"><button class="secondary" id="restartHu">Restart</button></div>
     </section>
 
+    <section class="page" id="endingPage">
+      <div class="badge">Final Story</div>
+      <section class="story-card ending-story-card">
+        <div class="story-heading">
+          <h1>Receiving Can Continue!</h1>
+          <p>See what happens after the ASN is created.</p>
+        </div>
+        <div class="story-caption" id="endingCaption">
+          <strong>Scene 4</strong><span>ASN created successfully — time to celebrate!</span>
+        </div>
+        <div class="ending-single-frame">
+          <img class="ending-scene active" data-ending-scene="0" src="assets/comic/ending-celebration.webp" alt="ASN created successfully celebration.">
+          <img class="ending-scene" data-ending-scene="1" src="assets/comic/ending-asn-found.webp" alt="Shipment arrives and Receiving finds the ASN.">
+          <img class="ending-scene" data-ending-scene="2" src="assets/comic/ending-gr-complete.webp" alt="Goods Receipt completed successfully.">
+        </div>
+        <div class="story-controls ending-controls">
+          <div id="endingStep">Scene 4 / 6</div>
+          <div class="story-buttons">
+            <button class="secondary small" id="endingBack" disabled>Back</button>
+            <button class="secondary small" id="endingNext">Next</button>
+          </div>
+        </div>
+      </section>
+    </section>
+
     <section class="page" id="donePage">
       <div class="done">
         <div class="done-check">✓</div>
         <div class="badge">Mission Complete</div>
         <h2>ASN Created</h2>
         <p>Great job — you helped Receiving continue the inbound process.</p>
-        <div class="ending-comic-strip" aria-label="Receiving story after ASN creation">
-          <img src="assets/comic/ending-celebration.webp" alt="ASN created successfully celebration.">
-          <img src="assets/comic/ending-asn-found.webp" alt="Shipment arrives and Receiving finds the ASN.">
-          <img src="assets/comic/ending-gr-complete.webp" alt="Goods Receipt completed successfully.">
-        </div>
-        <div><p>Your Time</p><div class="final-time" id="finalTime">00:00</div></div>
+<div><p>Your Time</p><div class="final-time" id="finalTime">00:00</div></div>
         <div class="summary">
           <div>✅ Correct invoice information matched</div>
           <div>✅ Correct pallet selected</div>
           <div>✅ Packaging Material <strong>6000.115.761</strong> • HU Type <strong>E105</strong></div>
         </div>
         <p><strong>Challenge a colleague to beat your time!</strong></p>
+        
+        <section class="leaderboard-panel" id="leaderboardPanel">
+          <div class="leaderboard-kicker">🏆 ASN RUSH LIVE LEADERBOARD</div>
+          <h3>Join the Ranking</h3>
+          <p class="leaderboard-sub">Your game time is captured automatically.</p>
+
+          <div class="score-capture">
+            <div class="score-box">
+              <span>Your Time</span>
+              <strong id="leaderboardYourTime">00:00</strong>
+            </div>
+            <label class="player-name-field">
+              <span>Player Name</span>
+              <input id="playerNameInput" maxlength="20" autocomplete="off" placeholder="Enter your name">
+            </label>
+            <button class="primary" id="submitScoreBtn" type="button">Submit Score</button>
+          </div>
+
+          <div class="leaderboard-status" id="leaderboardStatus">Leaderboard not connected.</div>
+          <div class="rank-highlight" id="rankHighlight" hidden>
+            <span>Your Current Rank</span>
+            <strong id="currentRank">#–</strong>
+          </div>
+
+          <div class="leaderboard-table-wrap">
+            <table class="leaderboard-table">
+              <thead><tr><th>#</th><th>Player</th><th>Time</th></tr></thead>
+              <tbody id="leaderboardRows">
+                <tr><td colspan="3" class="empty-row">Connect Firebase to enable live rankings.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <a class="leaderboard-display-link" href="leaderboard.html" target="_blank" rel="noopener">Open Big-Screen Leaderboard ↗</a>
+        </section>
+
         <button class="primary" id="playAgain">Play Again</button>
       </div>
     </section>
@@ -129,5 +198,6 @@
 <script src="app-v14-1.js?v=14"></script>
 <script src="app-v14-2.js?v=14"></script>
 <script src="app-v14-3.js?v=14"></script>
+  <script type="module" src="leaderboard.js?v=24"></script>
 </body>
 </html>

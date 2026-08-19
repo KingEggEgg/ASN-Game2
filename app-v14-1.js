@@ -1,3 +1,4 @@
+let openingSceneTimer=null;
 
 const CORRECT={invoice:'INV-001',awb:'1903099900',part:'1267370881',description:'Plastic Moulding; 538X354X28',qty:'200'};
 const LABELS={invoice:'Invoice No',awb:'AWB',part:'Part Number',description:'Description',qty:'Qty'};
@@ -5,10 +6,9 @@ const ORDER=['invoice','awb','part','description','qty'];
 const OPTIONS={invoice:['INV-001','INV-002','INV-003'],awb:['1903099900','1903099901','1903099902'],part:['1267370881','1267370882','1267370883'],description:['Plastic Moulding; 538X354X28','Thermal Conduction Compound','Lc Display; TFT 7inch'],qty:['200','240','120']};
 const PALLETS={'6000.115.761':['📦 Pallet A','1200 × 800 × 500 mm','HU E105'],'6000.115.762':['📦 Pallet B','1200 × 800 × 1000 mm','HU E112'],'6000.115.763':['📦 Pallet C','1200 × 800 × 1500 mm','HU E119']};
 const CAPTIONS=[
-  ['Scene 1','A truck arrives at Receiving.'],
-  ['Scene 2','The team is ready, but the ASN is missing.'],
-  ['Scene 3','Use the printed Dummy Invoice to match the shipment data.'],
-  ['Scene 4','Create the ASN, choose the pallet, and help Receiving move again.']
+  ['Scene 1','Shipment is on the way — but there is no ASN yet.'],
+  ['Scene 2','The shipment is here, but Receiving cannot find the ASN.'],
+  ['Scene 3','Check the Dummy Invoice and create the ASN so Receiving can continue.']
 ];
 const $=id=>document.getElementById(id);
 const state={scene:0,selectedPallet:null,start:null,secs:0,timer:null,pending:null,pickerField:null,pickerMode:null,palletAnimationLocked:false};
@@ -22,14 +22,14 @@ function setTheme(mode){const light=mode==='light';document.body.classList.toggl
 function toggleTheme(){setTheme(document.body.classList.contains('light')?'dark':'light')}
 
 function replaySceneAnimation(scene){const active=scenes[scene];active.querySelectorAll('*').forEach(el=>{el.style.animation='none';void el.offsetWidth;el.style.animation=''})}
-function updateScene(i){state.portrait-comic=i;scenes.forEach((s,n)=>s.classList.toggle('active',n===i));$('storyStep').textContent=`Scene ${i+1} / ${scenes.length}`;$('storyBack').disabled=i===0;$('storyNext').textContent=i===scenes.length-1?'Replay Scene':'Next';const [title,text]=CAPTIONS[i];$('storyCaption').innerHTML=`<strong>${title}</strong><span>${text}</span>`;replaySceneAnimation(i)}
-function nextScene(){if(state.portrait-comic===scenes.length-1) replaySceneAnimation(state.portrait-comic); else updateScene(state.portrait-comic+1)}
-function prevScene(){if(state.portrait-comic>0) updateScene(state.portrait-comic-1)}
+function updateScene(i){state.scene=i;scenes.forEach((s,n)=>s.classList.toggle('active',n===i));$('storyStep').textContent=`Scene ${i+1} / ${scenes.length}`;$('storyBack').disabled=i===0;$('storyNext').textContent=i===scenes.length-1?'Replay Scene':'Next';const [title,text]=CAPTIONS[i];$('storyCaption').innerHTML=`<strong>${title}</strong><span>${text}</span>`;replaySceneAnimation(i)}
+function nextScene(){if(state.scene===scenes.length-1) replaySceneAnimation(state.scene); else updateScene(state.scene+1)}
+function prevScene(){if(state.scene>0) updateScene(state.scene-1)}
 
 function tick(){state.secs=state.start?Math.floor((Date.now()-state.start)/1000):0;const t=fmt(state.secs);['timer1','timer2'].forEach(id=>{$(id).textContent=t;$(id).classList.toggle('hot',state.secs>=50)})}
 function startTimer(){clearInterval(state.timer);state.start=Date.now();state.secs=0;tick();state.timer=setInterval(tick,250)}
-function stopTimer(){tick();clearInterval(state.timer);state.timer=null;$('finalTime').textContent=fmt(state.secs)}
-function resetTimer(){clearInterval(state.timer);state.timer=null;state.start=null;state.secs=0;['timer1','timer2','finalTime'].forEach(id=>$(id).textContent='00:00')}
+function stopTimer(){tick();clearInterval(state.timer);state.timer=null;window.ASN_GAME_SCORE=state.secs;$('finalTime').textContent=fmt(state.secs)}
+function resetTimer(){window.ASN_GAME_SCORE=0;clearInterval(state.timer);state.timer=null;state.start=null;state.secs=0;['timer1','timer2','finalTime'].forEach(id=>$(id).textContent='00:00')}
 
 function message(id,text){$(id).textContent=text;$(id).classList.add('show')}
 function clearMessages(){['asnMessage','huMessage'].forEach(id=>{$(id).textContent='';$(id).classList.remove('show')})}
@@ -67,3 +67,27 @@ function openPalletPicker(){
   openPicker(options,'pallet')
 }
 // Offline 3D renderer (no CDN / no Three.js)
+
+
+// v23 automatic opening comic flow
+function startOpeningAutoPlay(){
+  clearTimeout(openingSceneTimer);
+  updateScene(0);
+
+  const advanceOpening=()=>{
+    if(state.scene<scenes.length-1){
+      updateScene(state.scene+1);
+      openingSceneTimer=setTimeout(advanceOpening,2000);
+    }else{
+      openingSceneTimer=setTimeout(()=>{
+        resetGame();
+        showPage('asnPage');
+        startTimer();
+      },2000);
+    }
+  };
+
+  openingSceneTimer=setTimeout(advanceOpening,2000);
+}
+
+window.addEventListener('load',()=>{if($('startPage')&&$('startPage').classList.contains('active'))startOpeningAutoPlay();});

@@ -65,7 +65,7 @@ function animatePalletFit(key){
       fit.classList.add('fit-success');result.textContent='✓ FITS THE RACK';
       stopTimer();
       if(button){button.textContent='Pallet Fits';button.disabled=true}
-      setTimeout(()=>overlay('✅','Pallet Fits!','Pallet A fits the rack. ASN creation is complete.',()=>showPage('donePage')),900)
+      setTimeout(()=>overlay('✅','Pallet Fits!','Pallet A fits the rack. ASN creation is complete.',()=>startEndingSequence()),900)
     }else{
       fit.classList.add('fit-fail');result.textContent='OVER SIZED · BLOCKED AT ENTRANCE';
       message('huMessage',`${name.replace('📦 ','')} is over sized. It is blocked at the rack entrance because its height exceeds 500 mm.`);
@@ -99,7 +99,7 @@ function checkHu(){
   clearMessages();
   if(!state.selectedPallet){message('huMessage','Tap "Choose Pallet Option" first.');return}
   if(state.selectedPallet!=='6000.115.761'){message('huMessage','Not quite — this pallet is too tall for the rack. Open the options again and try another one.');return}
-  stopTimer();overlay('✅','ASN Created','Receiving can continue. Nice work!',()=>showPage('donePage'))
+  stopTimer();overlay('✅','ASN Created','Receiving can continue. Nice work!',()=>startEndingSequence())
 }
 
 $('themeToggle').onclick=toggleTheme;
@@ -108,7 +108,7 @@ $('storyNext').onclick=nextScene;
 $('startMission').onclick=()=>{resetGame();showPage('asnPage');startTimer()};
 $('checkAsn').onclick=checkAsn;
 $('openPalletPicker').onclick=openPalletPicker;
-$('restartAsn').onclick=$('restartHu').onclick=$('playAgain').onclick=()=>{resetGame();showPage('startPage');updateScene(0)};
+$('restartAsn').onclick=$('restartHu').onclick=$('playAgain').onclick=()=>{clearTimeout(endingTimer);clearTimeout(endingSceneTimer);const eo=$('celebrationOverlay');if(eo){eo.classList.remove('active');eo.setAttribute('aria-hidden','true')}endingIndex=0;resetGame();showPage('startPage');startOpeningAutoPlay()};
 $('transitionContinue').onclick=continueOverlay;
 $('pickerOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closePicker()});
 
@@ -125,3 +125,81 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closePicker()});
 
 try{setTheme(localStorage.getItem('asnTheme')||'dark')}catch{setTheme('dark')}
 resetGame();updateScene(0);showPage('startPage');
+
+
+
+
+// v22 automatic ending flow
+let endingIndex=0;
+let endingTimer=null;
+let endingSceneTimer=null;
+
+const ENDING_CAPTIONS=[
+  ['Scene 4','ASN created successfully — time to celebrate!'],
+  ['Scene 5','The shipment arrives and Receiving finds the ASN in the system.'],
+  ['Scene 6','Goods Receipt is completed. Mission complete!']
+];
+
+function buildCelebrationConfetti(){
+  const host=$('celebrationConfetti');
+  if(!host)return;
+  host.innerHTML='';
+  const colors=['#ffd02a','#ff5252','#4fc3f7','#62d66f','#9b6cff','#ff8de3','#ffffff'];
+  for(let i=0;i<70;i++){
+    const p=document.createElement('i');
+    p.className='confetti-piece';
+    p.style.left=(Math.random()*100)+'%';
+    p.style.background=colors[i%colors.length];
+    p.style.animationDelay=(Math.random()*.8)+'s';
+    p.style.animationDuration=(2.0+Math.random()*1.2)+'s';
+    p.style.setProperty('--drift',((Math.random()-.5)*240)+'px');
+    host.appendChild(p);
+  }
+}
+
+function updateEndingScene(i){
+  endingIndex=i;
+  const scenes=[...document.querySelectorAll('.ending-scene')];
+  scenes.forEach((s,n)=>s.classList.toggle('active',n===i));
+  const step=$('endingStep'), caption=$('endingCaption');
+  if(step)step.textContent=`Scene ${i+4} / 6`;
+  if(caption){
+    const [title,text]=ENDING_CAPTIONS[i];
+    caption.innerHTML=`<strong>${title}</strong><span>${text}</span>`;
+  }
+  window.scrollTo(0,0);
+}
+
+function playEndingScenes(){
+  clearTimeout(endingSceneTimer);
+  showPage('endingPage');
+  updateEndingScene(0);
+
+  const advance=()=>{
+    if(endingIndex<2){
+      updateEndingScene(endingIndex+1);
+      endingSceneTimer=setTimeout(advance,2000);
+    }else{
+      endingSceneTimer=setTimeout(()=>showPage('donePage'),2000);
+    }
+  };
+  endingSceneTimer=setTimeout(advance,2000);
+}
+
+function startEndingSequence(){
+  clearTimeout(endingTimer);
+  clearTimeout(endingSceneTimer);
+  const overlay=$('celebrationOverlay');
+  buildCelebrationConfetti();
+  if(overlay){
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden','false');
+  }
+  endingTimer=setTimeout(()=>{
+    if(overlay){
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden','true');
+    }
+    playEndingScenes();
+  },2600);
+}

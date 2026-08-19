@@ -1,0 +1,26 @@
+{
+  "rules": {
+    "asnRushScores": {
+      ".read": true,
+      ".indexOn": ["scoreSeconds"],
+      "$scoreId": {
+        ".write": "!data.exists() && newData.hasChildren(['playerName','scoreSeconds','completedAt','sessionId'])",
+        "playerName": {
+          ".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 20"
+        },
+        "scoreSeconds": {
+          ".validate": "newData.isNumber() && newData.val() >= 5 && newData.val() <= 600"
+        },
+        "completedAt": {
+          ".validate": "newData.isNumber() && newData.val() > 0"
+        },
+        "sessionId": {
+          ".validate": "newData.isString() && newData.val().length >= 8 && newData.val().length <= 100"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}

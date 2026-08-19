@@ -1,5 +1,10 @@
-// v30 HD comics + story timing override
+// v31 HD comics + story timing + mobile polish
 (function(){
+  const fixCss=document.createElement('link');
+  fixCss.rel='stylesheet';
+  fixCss.href='styles-v31-fixes.css?v=31';
+  document.head.appendChild(fixCss);
+
   const INTRO_DELAY=3000, ENDING_DELAY=3000;
   const INTRO=[
     ['Scene 1','Shipment is on the way, but there is no ASN yet.'],
@@ -19,9 +24,13 @@
   ];
   let introTimer=null,endingTimer=null;
 
+  document.addEventListener('DOMContentLoaded',()=>{
+    document.querySelectorAll('.story-heading p').forEach(p=>p.remove());
+  });
+
   async function loadHdImage(spec){
     const chunks=await Promise.all(spec.parts.map(async name=>{
-      const r=await fetch(`assets/comic/b64/${name}?v=30`,{cache:'no-store'});
+      const r=await fetch(`assets/comic/b64/${name}?v=31`,{cache:'no-store'});
       if(!r.ok)throw new Error(`${name}: HTTP ${r.status}`);
       return (await r.text()).trim();
     }));

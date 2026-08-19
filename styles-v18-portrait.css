@@ -1,8 +1,11 @@
 
 /* v18 portrait comic */
 .portrait-comic-frame{max-width:430px;margin:0 auto;background:#071827;border:4px solid #111;border-radius:14px;overflow:hidden;box-shadow:8px 8px 0 rgba(0,0,0,.35)}
-.portrait-comic{display:none;width:100%;height:auto;aspect-ratio:313/830;object-fit:cover;object-position:top center;background:#fff}
+.portrait-comic{display:none;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;object-position:top center;background:#fff}
 .portrait-comic.active{display:block;animation:comicIn .35s ease both}
 @keyframes comicIn{from{opacity:0;transform:scale(.97) translateY(8px)}to{opacity:1;transform:none}}
 @media(max-width:600px){.story-card{padding:10px}.story-heading h1{font-size:2.1rem}.portrait-comic-frame{max-width:92vw}.story-caption{font-size:.9rem}.story-controls{max-width:430px;margin:10px auto 0}}
-.ending-comic-strip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin:18px auto;max-width:980px;padding:5px}.ending-comic-strip img{width:min(360px,82vw);height:auto;aspect-ratio:313/830;object-fit:cover;object-position:top;border:4px solid #111;border-radius:12px;scroll-snap-align:center;flex:0 0 auto;box-shadow:6px 6px 0 rgba(0,0,0,.28)}@media(max-width:600px){.ending-comic-strip{max-width:92vw}.ending-comic-strip img{width:86vw}}
+.ending-comic-strip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin:18px auto;max-width:980px;padding:5px}.ending-comic-strip img{width:min(360px,82vw);height:auto;aspect-ratio:3/4;object-fit:contain;object-position:top;border:4px solid #111;border-radius:12px;scroll-snap-align:center;flex:0 0 auto;box-shadow:6px 6px 0 rgba(0,0,0,.28)}@media(max-width:600px){.ending-comic-strip{max-width:92vw}.ending-comic-strip img{width:86vw}}
+/* v20 final six original 3:4 comic scenes */
+.ending-comic-strip{align-items:flex-start}
+.ending-comic-strip img{background:#fff}

@@ -13,19 +13,23 @@
   ];
   const ENDING=[
     ['Scene 4','Great job! The ASN is ready.'],
-    ['Scene 5','ASN found — Receiving can continue.']
+    ['Scene 5','ASN found — Receiving can complete GR.']
   ];
   const HD_SPECS=[
     {selector:'.portrait-comic[data-scene="0"]',parts:['s1-0.txt','s1-1.txt','s1-2.txt']},
     {selector:'.portrait-comic[data-scene="1"]',parts:['s2-0.txt','s2-1.txt','s2-2.txt']},
     {selector:'.portrait-comic[data-scene="2"]',parts:['s3-0.txt','s3-1.txt','s3-2.txt']},
-    {selector:'.ending-scene[data-ending-scene="0"]',parts:['s4-0.txt','s4-1.txt','s4-2.txt','s4-3.txt']},
-    {selector:'.ending-scene[data-ending-scene="1"]',parts:['s5-0.txt','s5-1.txt','s5-2.txt']}
+    {selector:'.ending-scene[data-ending-scene="0"]',parts:['s4-0.txt','s4-1.txt','s4-2.txt','s4-3.txt']}
   ];
   let introTimer=null,endingTimer=null;
 
   document.addEventListener('DOMContentLoaded',()=>{
     document.querySelectorAll('.story-heading p').forEach(p=>p.remove());
+    const finalImg=document.querySelector('.ending-scene[data-ending-scene="1"]');
+    if(finalImg){
+      finalImg.src='assets/comic/ending-gr-complete.webp?v=31';
+      finalImg.alt='Receiving completes GR successfully.';
+    }
   });
 
   async function loadHdImage(spec){

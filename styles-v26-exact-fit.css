@@ -1,4 +1,65 @@
-/* v26 exact-fit comic image override */
-.portrait-comic-frame,.ending-single-frame{padding:0!important;line-height:0!important}
-.portrait-comic,.ending-scene{display:none;width:100%!important;height:auto!important;max-width:100%!important;aspect-ratio:auto!important;object-fit:fill!important;background:transparent!important}
-.portrait-comic.active,.ending-scene.active{display:block!important}
+/* v28 exact-fit comic layout — no empty side space inside story cards */
+
+/* Keep opening/final story cards matched to the portrait comic width on desktop. */
+#startPage .story-card,
+#endingPage .story-card{
+  width:min(100%, 470px)!important;
+  max-width:470px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  box-sizing:border-box!important;
+}
+
+/* The comic frame fills the story card instead of staying as a narrow fixed island. */
+.portrait-comic-frame,
+.ending-single-frame{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  padding:0!important;
+  line-height:0!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+.portrait-comic,
+.ending-scene{
+  display:none;
+  width:100%!important;
+  height:auto!important;
+  max-width:100%!important;
+  aspect-ratio:auto!important;
+  object-fit:fill!important;
+  object-position:center top!important;
+  background:transparent!important;
+  vertical-align:top!important;
+  margin:0!important;
+}
+
+.portrait-comic.active,
+.ending-scene.active{
+  display:block!important;
+}
+
+/* Captions/headings remain inside exactly the same visual width. */
+#startPage .story-caption,
+#endingPage .story-caption,
+#startPage .story-heading,
+#endingPage .story-heading{
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+
+@media (max-width:600px){
+  #startPage .story-card,
+  #endingPage .story-card{
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  .portrait-comic-frame,
+  .ending-single-frame{
+    width:100%!important;
+  }
+}

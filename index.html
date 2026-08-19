@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles-v18-portrait.css?v=18">
   <link rel="stylesheet" href="styles-v21-ending.css?v=21">
   <link rel="stylesheet" href="leaderboard.css?v=24">
+  <link rel="stylesheet" href="styles-v26-exact-fit.css?v=26">
 </head>
 <body>
 <main class="app">
@@ -56,7 +57,6 @@
           <h1>ASN Rush</h1>
           <p>A short cartoon story before the mission starts.</p>
         </div>
-
         <div class="story-scene-wrap portrait-story">
           <div class="story-caption" id="storyCaption">
             <strong>Scene 1</strong><span>A shipment is on the way — but there is no ASN yet.</span>
@@ -147,19 +147,17 @@
         <div class="badge">Mission Complete</div>
         <h2>ASN Created</h2>
         <p>Great job — you helped Receiving continue the inbound process.</p>
-<div><p>Your Time</p><div class="final-time" id="finalTime">00:00</div></div>
+        <div><p>Your Time</p><div class="final-time" id="finalTime">00:00</div></div>
         <div class="summary">
           <div>✅ Correct invoice information matched</div>
           <div>✅ Correct pallet selected</div>
           <div>✅ Packaging Material <strong>6000.115.761</strong> • HU Type <strong>E105</strong></div>
         </div>
         <p><strong>Challenge a colleague to beat your time!</strong></p>
-        
         <section class="leaderboard-panel" id="leaderboardPanel">
           <div class="leaderboard-kicker">🏆 ASN RUSH LIVE LEADERBOARD</div>
           <h3>Join the Ranking</h3>
           <p class="leaderboard-sub">Your game time is captured automatically.</p>
-
           <div class="score-capture">
             <div class="score-box">
               <span>Your Time</span>
@@ -171,13 +169,11 @@
             </label>
             <button class="primary" id="submitScoreBtn" type="button">Submit Score</button>
           </div>
-
           <div class="leaderboard-status" id="leaderboardStatus">Leaderboard not connected.</div>
           <div class="rank-highlight" id="rankHighlight" hidden>
             <span>Your Current Rank</span>
             <strong id="currentRank">#–</strong>
           </div>
-
           <div class="leaderboard-table-wrap">
             <table class="leaderboard-table">
               <thead><tr><th>#</th><th>Player</th><th>Time</th></tr></thead>
@@ -186,10 +182,8 @@
               </tbody>
             </table>
           </div>
-
           <a class="leaderboard-display-link" href="leaderboard.html" target="_blank" rel="noopener">Open Big-Screen Leaderboard ↗</a>
         </section>
-
         <button class="primary" id="playAgain">Play Again</button>
       </div>
     </section>
@@ -198,6 +192,6 @@
 <script src="app-v14-1.js?v=14"></script>
 <script src="app-v14-2.js?v=14"></script>
 <script src="app-v14-3.js?v=14"></script>
-  <script type="module" src="leaderboard.js?v=24"></script>
+<script type="module" src="leaderboard.js?v=24"></script>
 </body>
 </html>

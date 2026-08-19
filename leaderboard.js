@@ -1,7 +1,7 @@
 import { firebaseConfig, leaderboardPath } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import {
-  getDatabase, ref, push, onValue, query, orderByChild, limitToFirst
+  getDatabase, ref, push, onValue, query, orderByChild, limitToFirst, get
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
 const $ = id => document.getElementById(id);
@@ -37,7 +37,6 @@ function sanitizeName(value){
 function getCurrentScore(){
   const n = Number(window.ASN_GAME_SCORE);
   if(Number.isFinite(n) && n > 0) return Math.floor(n);
-
   const txt = $("finalTime")?.textContent?.trim();
   const m = /^(\d+):(\d{2})$/.exec(txt || "");
   if(m) return Number(m[1]) * 60 + Number(m[2]);
@@ -58,7 +57,6 @@ function renderRows(scores, highlightId=null){
     tbody.innerHTML = '<tr><td colspan="3" class="empty-row">No scores yet. Be the first!</td></tr>';
     return;
   }
-
   tbody.innerHTML = scores.slice(0,10).map((item,index)=>{
     const me = item.id === highlightId ? ' class="is-you"' : "";
     return `<tr${me}>
@@ -83,7 +81,6 @@ function updateYourTime(){
   const el = $("leaderboardYourTime");
   if(el) el.textContent = formatSeconds(getCurrentScore());
 }
-
 setInterval(updateYourTime, 500);
 updateYourTime();
 
@@ -95,7 +92,6 @@ if(!isConfigured(firebaseConfig)){
   try{
     const app = initializeApp(firebaseConfig);
     db = getDatabase(app);
-
     const topScoresQuery = query(
       ref(db, leaderboardPath),
       orderByChild("scoreSeconds"),
@@ -112,7 +108,6 @@ if(!isConfigured(firebaseConfig)){
         || (Number(a.completedAt)||0) - (Number(b.completedAt)||0)
       );
       renderRows(latestScores, submittedId);
-
       if(submittedId){
         const idx = latestScores.findIndex(x=>x.id===submittedId);
         if(idx >= 0){
@@ -128,6 +123,23 @@ if(!isConfigured(firebaseConfig)){
       setStatus("Leaderboard connection failed. Check Firebase rules/config.", "error");
     });
 
+    async function refreshLeaderboardNow(){
+      try{
+        const snapshot=await get(topScoresQuery);
+        latestScores=[];
+        snapshot.forEach(child=>{
+          latestScores.push({ id: child.key, ...child.val() });
+        });
+        latestScores.sort((a,b)=>
+          (Number(a.scoreSeconds)||999999) - (Number(b.scoreSeconds)||999999)
+          || (Number(a.completedAt)||0) - (Number(b.completedAt)||0)
+        );
+        renderRows(latestScores, submittedId);
+      }catch(err){
+        console.error("5-sec leaderboard refresh failed:", err);
+      }
+    }
+    setInterval(refreshLeaderboardNow,5000);
     setStatus("Live leaderboard connected.", "online");
   }catch(err){
     console.error("Firebase init error:", err);
@@ -141,10 +153,8 @@ const submitBtn = $("submitScoreBtn");
 if(submitBtn){
   submitBtn.addEventListener("click", async ()=>{
     if(!db) return;
-
     const playerName = sanitizeName($("playerNameInput")?.value);
     const scoreSeconds = getCurrentScore();
-
     if(playerName.length < 2){
       setStatus("Please enter at least 2 characters for your name.", "error");
       $("playerNameInput")?.focus();
@@ -154,10 +164,8 @@ if(submitBtn){
       setStatus("Score is outside the allowed range.", "error");
       return;
     }
-
     submitBtn.disabled = true;
     submitBtn.textContent = "Submitting...";
-
     try{
       const result = await push(ref(db, leaderboardPath), {
         playerName,

@@ -3,8 +3,9 @@
     "asnRushScores": {
       ".read": true,
       ".indexOn": ["scoreSeconds"],
+      ".write": "auth != null && !newData.exists()",
       "$scoreId": {
-        ".write": "!data.exists() && newData.hasChildren(['playerName','scoreSeconds','completedAt','sessionId'])",
+        ".write": "(!data.exists() && newData.exists()) || (auth != null && !newData.exists())",
         "playerName": {
           ".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 20"
         },

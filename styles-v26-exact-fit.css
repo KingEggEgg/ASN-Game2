@@ -1,0 +1,4 @@
+/* v26 exact-fit comic image override */
+.portrait-comic-frame,.ending-single-frame{padding:0!important;line-height:0!important}
+.portrait-comic,.ending-scene{display:none;width:100%!important;height:auto!important;max-width:100%!important;aspect-ratio:auto!important;object-fit:fill!important;background:transparent!important}
+.portrait-comic.active,.ending-scene.active{display:block!important}

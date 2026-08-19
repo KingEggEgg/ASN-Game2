@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ASN Rush Live Leaderboard</title>
+  <link rel="stylesheet" href="leaderboard.css?v=24">
+  <style>
+    html,body{min-height:100%;margin:0}
+    body{background:radial-gradient(circle at top,#164a83 0,#071827 55%,#020912 100%);color:#fff;font-family:Arial,Helvetica,sans-serif}
+    .display-shell{min-height:100vh;display:grid;place-items:center;padding:32px;box-sizing:border-box}
+    .display-board{width:min(1100px,96vw);border:5px solid #111;border-radius:24px;background:rgba(5,22,38,.96);box-shadow:14px 14px 0 rgba(0,0,0,.35);overflow:hidden}
+    .display-head{padding:26px 34px;background:linear-gradient(90deg,#ffd02a,#ffb300);color:#111;text-align:center;border-bottom:5px solid #111}
+    .display-head .eyebrow{font-size:20px;font-weight:1000;letter-spacing:.14em}
+    .display-head h1{font-size:clamp(48px,7vw,92px);line-height:.9;margin:10px 0 6px;text-transform:uppercase}
+    .display-head p{font-weight:900;margin:0;font-size:22px}
+    .record-card{display:flex;align-items:center;justify-content:center;gap:30px;padding:24px;border-bottom:3px solid rgba(255,255,255,.12)}
+    .record-card span{font-weight:900;text-transform:uppercase;letter-spacing:.1em;opacity:.8}
+    .record-card strong{font-size:clamp(48px,7vw,88px);color:#ffd02a}
+    .display-status{text-align:center;padding:10px;font-weight:900}
+    .display-table{width:100%;border-collapse:collapse}
+    .display-table th,.display-table td{padding:16px 28px;border-bottom:1px solid rgba(255,255,255,.1);font-size:clamp(20px,2.4vw,34px)}
+    .display-table th{font-size:16px;text-transform:uppercase;letter-spacing:.12em;opacity:.7;text-align:left}
+    .display-table td:first-child{width:100px;font-weight:1000;color:#ffd02a}
+    .display-table td:last-child{font-weight:1000}
+    .display-footer{text-align:center;padding:20px;font-size:20px;font-weight:900;letter-spacing:.08em}
+  </style>
+</head>
+<body>
+  <main class="display-shell">
+    <section class="display-board">
+      <header class="display-head">
+        <div class="eyebrow">🏆 COMMERCIAL DAY</div>
+        <h1>ASN Rush</h1>
+        <p>LIVE LEADERBOARD</p>
+      </header>
+
+      <div class="record-card">
+        <span>Best Time</span>
+        <strong id="bestTime">--:--</strong>
+      </div>
+
+      <div class="display-status" id="displayStatus">Leaderboard not connected.</div>
+
+      <table class="display-table">
+        <thead><tr><th>Rank</th><th>Player</th><th>Time</th></tr></thead>
+        <tbody id="displayRows">
+          <tr><td colspan="3" style="text-align:center;opacity:.65">Connect Firebase to start live ranking.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="display-footer">CAN YOU BEAT THE RECORD?</div>
+    </section>
+  </main>
+  <script type="module" src="leaderboard-display.js?v=24"></script>
+</body>
+</html>

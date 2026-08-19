@@ -1,4 +1,4 @@
-// v29 story timing override
+// v30 story timing override
 (function(){
   const INTRO_DELAY=3000, ENDING_DELAY=3000;
   const INTRO=[
@@ -11,34 +11,37 @@
     ['Scene 5','ASN found — Receiving can continue.']
   ];
   let introTimer=null, endingTimer=null;
-
-  function introImages(){ return [...document.querySelectorAll('.portrait-comic')]; }
-  function endingImages(){ return [...document.querySelectorAll('.ending-scene')]; }
+  function introImages(){return [...document.querySelectorAll('.portrait-comic')];}
+  function endingImages(){return [...document.querySelectorAll('.ending-scene')];}
   function setIntro(i){
     introImages().forEach((img,n)=>img.classList.toggle('active',n===i));
-    const c=document.getElementById('storyCaption'), s=document.getElementById('storyStep');
+    const c=document.getElementById('storyCaption'),s=document.getElementById('storyStep');
     if(c)c.innerHTML=`<strong>${INTRO[i][0]}</strong><span>${INTRO[i][1]}</span>`;
     if(s)s.textContent=`Scene ${i+1} / 3`;
+    window.scrollTo(0,0);
   }
   function setEnding(i){
     endingImages().forEach((img,n)=>img.classList.toggle('active',n===i));
-    const c=document.getElementById('endingCaption'), s=document.getElementById('endingStep');
+    const c=document.getElementById('endingCaption'),s=document.getElementById('endingStep');
     if(c)c.innerHTML=`<strong>${ENDING[i][0]}</strong><span>${ENDING[i][1]}</span>`;
     if(s)s.textContent=`Scene ${i+4} / 5`;
+    window.scrollTo(0,0);
   }
-  window.startOpeningAutoPlay=function(){
+  window.startOpeningAutoPlay=async function(){
     clearTimeout(introTimer);
     const btn=document.getElementById('startMission');
     if(btn){btn.style.setProperty('display','none','important');btn.disabled=true;}
-    let i=0;setIntro(0);
+    if(window.HD_IMAGES_READY) await window.HD_IMAGES_READY;
+    let i=0; setIntro(0);
     const next=()=>{
       if(i<2){i++;setIntro(i);introTimer=setTimeout(next,INTRO_DELAY);}
-      else if(btn){btn.style.setProperty('display','block','important');btn.disabled=false;}
+      else if(btn){btn.style.setProperty('display','block','important');btn.disabled=false;btn.textContent='START MISSION';}
     };
     introTimer=setTimeout(next,INTRO_DELAY);
   };
-  window.playEndingScenes=function(){
+  window.playEndingScenes=async function(){
     clearTimeout(endingTimer);
+    if(window.HD_IMAGES_READY) await window.HD_IMAGES_READY;
     if(typeof showPage==='function')showPage('endingPage');
     let i=0;setEnding(0);
     const next=()=>{

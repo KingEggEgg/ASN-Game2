@@ -1,8 +1,8 @@
-// v31 HD comics + story timing + mobile polish
+// v32 HD comics + story timing + mobile fixes
 (function(){
   const fixCss=document.createElement('link');
   fixCss.rel='stylesheet';
-  fixCss.href='styles-v31-fixes.css?v=31';
+  fixCss.href='styles-v31-fixes.css?v=32';
   document.head.appendChild(fixCss);
 
   const INTRO_DELAY=3000, ENDING_DELAY=3000;
@@ -27,14 +27,14 @@
     document.querySelectorAll('.story-heading p').forEach(p=>p.remove());
     const finalImg=document.querySelector('.ending-scene[data-ending-scene="1"]');
     if(finalImg){
-      finalImg.src='assets/comic/ending-gr-complete.webp?v=31';
-      finalImg.alt='Receiving completes GR successfully.';
+      finalImg.src='assets/comic/ending-asn-found.webp?v=32';
+      finalImg.alt='ASN found. Receiving can continue and complete GR.';
     }
   });
 
   async function loadHdImage(spec){
     const chunks=await Promise.all(spec.parts.map(async name=>{
-      const r=await fetch(`assets/comic/b64/${name}?v=31`,{cache:'no-store'});
+      const r=await fetch(`assets/comic/b64/${name}?v=32`,{cache:'no-store'});
       if(!r.ok)throw new Error(`${name}: HTTP ${r.status}`);
       return (await r.text()).trim();
     }));
